@@ -11,8 +11,8 @@ TextTheme defaultText = TextTheme(
     displayLarge: GoogleFonts.nunito(fontWeight: FontWeight.bold, fontSize: 96),
     displayMedium: GoogleFonts.nunito(fontWeight: FontWeight.bold, fontSize: 60),
     displaySmall: GoogleFonts.nunito(fontWeight: FontWeight.bold, fontSize: 48),
-    headlineMedium: GoogleFonts.nunito(fontWeight: FontWeight.bold, fontSize: 34),
-    headlineSmall: GoogleFonts.nunito(fontWeight: FontWeight.bold, fontSize: 24),
+    headlineLarge: GoogleFonts.nunito(fontWeight: FontWeight.bold, fontSize: 34),
+    headlineMedium: GoogleFonts.nunito(fontWeight: FontWeight.bold, fontSize: 24),
     titleLarge: GoogleFonts.nunito(fontWeight: FontWeight.bold, fontSize: 20),
     bodyLarge: GoogleFonts.nunito(fontSize: 16, fontWeight: FontWeight.normal),
     bodyMedium: GoogleFonts.nunito(

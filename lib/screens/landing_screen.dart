@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:food_stall/screens/product_item.dart';
+import 'package:food_stall/screens/product_page.dart';
 import 'package:food_stall/utils/constants.dart';
 import 'package:food_stall/utils/widget_functions.dart';
 
@@ -53,10 +55,19 @@ class LandingScreen extends StatefulWidget {
 }
 
 class _LandingScreenState extends State<LandingScreen> {
+  final FocusNode _focusNode = FocusNode();
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _focusNode.unfocus();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.sizeOf(context).height * 1;
-    final width = MediaQuery.sizeOf(context).width * 1;
+    // final height = MediaQuery.sizeOf(context).height * 1;
+    // final width = MediaQuery.sizeOf(context).width * 1;
     final TextTheme textTheme = Theme.of(context).textTheme;
     return SafeArea(
       child: Scaffold(
@@ -80,9 +91,10 @@ class _LandingScreenState extends State<LandingScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Container(
-                                  width: width * .1,
+                                  width: 70,
                                   decoration: BoxDecoration(
                                     color: Colors.white,
                                     borderRadius: BorderRadius.circular(20),
@@ -93,34 +105,50 @@ class _LandingScreenState extends State<LandingScreen> {
                                         Image.asset("assets/images/avatar.png"),
                                   ),
                                 ),
-                                addHorizontalSpace(width * .02),
+                                addHorizontalSpace(20),
                                 Expanded(
+                                  flex: 7,
                                     child: Text(
                                   'How Hungry are you Today?',
-                                  style: textTheme.titleLarge!
+                                  style: textTheme.headlineMedium!
                                       .apply(color: Colors.white),
                                 ))
                               ],
                             ),
                             TextField(
+                              focusNode: _focusNode,
+                              cursorColor: Colors.white,
+                              cursorRadius: Radius.circular(10),
                               style: TextStyle(color: Colors.white),
                               decoration: InputDecoration(
                                 hintText: 'Search for foods',
                                 hintStyle: TextStyle(color: Colors.white),
-                                border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
-                                prefixIcon: Icon(Icons.search,color: Colors.white,),
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                borderSide: BorderSide.none),
+                                prefixIcon: Icon(
+                                  Icons.search,
+                                  color: Colors.white,
+                                ),
                                 suffixIcon: Container(
                                   height: 70,
                                   width: 70,
                                   decoration: BoxDecoration(
-                                    color: Colors.white24,borderRadius: BorderRadius.only(topRight: Radius.circular(20), bottomRight: Radius.circular(20)),
+                                    color: Colors.white24,
+                                    borderRadius: BorderRadius.only(
+                                        topRight: Radius.circular(20),
+                                        bottomRight: Radius.circular(20)),
                                   ),
-                                  child: Icon(Icons.menu, color: Colors.white,),
+                                  child: Icon(
+                                    Icons.menu,
+                                    color: Colors.white,
+                                  ),
                                 ),
                                 fillColor: Colors.white24,
                                 filled: true,
                               ),
-                            )
+                            ),
+                            addVerticalSpace(10),
                           ],
                         ),
                       )
@@ -130,7 +158,90 @@ class _LandingScreenState extends State<LandingScreen> {
                 Container(
                   width: constraints.maxWidth,
                   color: Colors.grey.shade200,
-                  height: height * .6,
+                  // height: height * .6,
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 10, bottom: 10),
+                    child: Stack(
+                      clipBehavior: Clip.none,
+                      children: [
+                        Column(
+                          children: [
+                            addVerticalSpace(constraints.maxWidth * .35),
+                            Row(
+                              children: [
+                                Text(
+                                  'Popular Foods',
+                                  style: textTheme.headlineMedium,
+                                ),
+                                Expanded(child: Center()),
+                                Text(
+                                  'View All > ',
+                                  style: textTheme.bodySmall!
+                                      .apply(color: COLOR_ORANGE),
+                                ),
+                                addHorizontalSpace(10)
+                              ],
+                            ),
+                            addVerticalSpace(10),
+                            SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              physics: BouncingScrollPhysics(),
+                              child: Row(
+                                children:
+                                  PRODUCT_DATA.map((data) => InkWell(
+                                    onTap: (){
+                                      _focusNode.unfocus();
+                                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProductPage(productData: data)));
+                                    },
+                                    child: ProductItem(
+                                      width: constraints.maxWidth * 0.59,
+                                      productData: data
+                                    ),
+                                  )).toList()
+                              ),
+                            )
+                          ],
+                        ),
+                        Positioned(
+                          top: -40,
+                          left: 0,
+                          child: Container(
+                            width: constraints.maxWidth,
+                            height: constraints.maxWidth * .35,
+                            child: ListView(
+                              scrollDirection: Axis.horizontal,
+                              physics: BouncingScrollPhysics(),
+                              children:
+                                CATEGORIES.map((category) => Container(
+                                      margin: EdgeInsets.only(right: 10),
+                                      width: constraints.maxWidth * .25,
+                                      decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(20)),
+                                      child: Padding(
+                                        padding: EdgeInsets.all(10),
+                                        child: Column(
+                                          children: [
+                                            Image.asset(
+                                                "assets/images/${category['image']}"),
+                                            addVerticalSpace(10),
+                                            Text(
+                                              "${category['name']}",
+                                              style: textTheme.bodySmall!
+                                                  .apply(color: COLOR_BLACK),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                ).toList(),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
                 )
               ],
             ),
